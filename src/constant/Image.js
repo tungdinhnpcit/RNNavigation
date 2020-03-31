@@ -5,6 +5,8 @@ const IMAGE = {
   ICON_FOCUSED: require('../images/homeFocused.png'),
   ICON_HOME: require('../images/home.png'),
   ICON_STF: require('../images/settingFocused.png'),
-  ICON_SETTING: require('../images/setting.png')
+  ICON_SETTING: require('../images/setting.png'),
+  ICON_CART:require('../images/cart.png'),
+  ICON_CARTSELECT:require('../images/cartSelect.png')
 };
 export {IMAGE};
