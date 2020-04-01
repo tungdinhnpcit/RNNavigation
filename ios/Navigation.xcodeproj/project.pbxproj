@@ -22,6 +22,7 @@
 		5DD6796CA2E02BC024EEEB3B /* libPods-Navigation-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5367C031AD60A4A3854889 /* libPods-Navigation-tvOS.a */; };
 		D1195DDC2432F59E005885D3 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = D1195DDB2432F59E005885D3 /* NotificationService.m */; };
 		D1195DE02432F59E005885D3 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D1195DD82432F59E005885D3 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D1D2FBC62433996E00029985 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D1D2FBC52433996E00029985 /* GoogleService-Info.plist */; };
 		E20833457D6D755BC70E9C0E /* libPods-Navigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88509BC76D6A33008CE27C31 /* libPods-Navigation.a */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +94,7 @@
 		D1195DDA2432F59E005885D3 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		D1195DDB2432F59E005885D3 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		D1195DDD2432F59E005885D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1D2FBC52433996E00029985 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E79CF351CBE895783C4CF888 /* Pods-Navigation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Navigation.release.xcconfig"; path = "Target Support Files/Pods-Navigation/Pods-Navigation.release.xcconfig"; sourceTree = "<group>"; };
 		EA0A0258AEEB8A6CB77D1BC3 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -165,6 +167,7 @@
 		13B07FAE1A68108700A75B9A /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				D1D2FBC52433996E00029985 /* GoogleService-Info.plist */,
 				D1195DD32432F4F5005885D3 /* Navigation.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -286,6 +289,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				D1195DE42432F59E005885D3 /* Embed App Extensions */,
+				9512C1126AC87BC437C4DF82 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -424,6 +428,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				D1D2FBC62433996E00029985 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,6 +571,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9512C1126AC87BC437C4DF82 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Navigation/Pods-Navigation-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Navigation/Pods-Navigation-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F4EE554ACC929E8F8425E8F7 /* [CP] Check Pods Manifest.lock */ = {

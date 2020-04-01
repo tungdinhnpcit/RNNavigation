@@ -9,7 +9,7 @@ import {
   FlatList,
   Dimensions,
   TextInput,
-  DeviceEventEmitter,
+  StyleSheet,
   AsyncStorage,
   ActivityIndicator,
   Alert
@@ -17,14 +17,10 @@ import {
 import { CustomHeader } from "../index";
 import ControlText from "../component/ControlText";
 import { SliderBox } from "react-native-image-slider-box";
-import ControlImage from "../component/ControlImage";
-const { height, width } = Dimensions.get("window");
-import ControlTextInput from "../component/ControlTextInput";
+const { width } = Dimensions.get("window");
 import * as Progress from "react-native-progress";
-// import Geolocation from 'react-native-geolocation-service';
 import Geolocation from "@react-native-community/geolocation";
-//Geolocation.setRNConfiguration(config);
-import { check, PERMISSIONS, RESULTS } from "react-native-permissions";
+import MapView, {Marker} from "react-native-maps";
 import OneSignal from "react-native-onesignal";
 
 export class HomeScreen extends Component {
@@ -36,7 +32,8 @@ export class HomeScreen extends Component {
       isShowLoading: false,
       selectedIndex: 0,
       tabIndex: 0,
-      initialPosition: ""
+      latitude: undefined,
+      longitude: undefined
     };
     OneSignal.init("4cf4ecb2-f26f-4e80-b4f4-49c48d27e04d");
   }
@@ -45,9 +42,13 @@ export class HomeScreen extends Component {
     try {
       Geolocation.requestAuthorization();
       Geolocation.getCurrentPosition(
-        position => {
-          const initialPosition = JSON.stringify(position);
-          this.setState({ initialPosition: initialPosition });
+       (position) => {
+          console.log(position.coords)
+         this.setState({ 
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+          console.log("initialPosition", this.state.latitude)
         },
         error => Alert.alert("Error", JSON.stringify(error)),
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -246,7 +247,6 @@ export class HomeScreen extends Component {
             </View>
           </ScrollView>
         </View>
-
         {this.state.isShowLoading ? (
           <View
             style={{
@@ -260,7 +260,47 @@ export class HomeScreen extends Component {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         ) : null}
+        {this.state.latitude && this.state.longitude
+        ?
+        <View style={styles.container}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
+            }}
+          >
+            <Marker
+            coordinate={{latitude:this.state.latitude, longitude:this.state.longitude}}
+            title={"It's me"}
+            description={"I am working at home"}
+          />
+        </MapView>
+        </View> : null
+        }
       </SafeAreaView>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: "100%",
+    height: 300
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+})
