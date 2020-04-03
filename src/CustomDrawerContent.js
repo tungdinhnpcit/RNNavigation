@@ -45,6 +45,13 @@ export class CustomDrawerContent extends Component {
             }}>
             <Text>Notifications</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={{marginTop: 20}}
+            onPress={() => {
+              this.props.navigation.navigate('Map');
+            }}>
+            <Text>Map</Text>
+          </TouchableOpacity>
         </ScrollView>
         <TouchableOpacity
             style={{marginTop: 20, marginLeft:10}}

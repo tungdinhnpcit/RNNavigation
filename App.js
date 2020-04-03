@@ -12,15 +12,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { CustomHeader, CustomDrawerContent } from "./src";
+import { CustomDrawerContent } from "./src";
 import {
   HomeScreen,
   HomeDetail,
-  SettingScreen,
-  SettingDetail,
   Cart
 } from "./src/tab";
-import { NotificationsScreen } from "./src/drawer";
+import { NotificationsScreen,Map } from "./src/drawer";
 import { RegisterScreen, LoginScreen } from "./src/auth";
 import { IMAGE } from "./src/constant/Image";
 import Search from './src/tab/Search'
@@ -99,7 +97,6 @@ function TabNavigator() {
     >
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Cart" component={CartStack} />
-      {/* <Tab.Screen name="Me" component={SettingStack} /> */}
       {/* <Tab.Screen name="DaLuu" component={SettingStack} /> */}
     </Tab.Navigator>
   );
@@ -113,6 +110,7 @@ function DrawerNavigator({ navigation }) {
     >
       <Drawer.Screen name="MenuTab" component={TabNavigator} />
       <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+      <Drawer.Screen name="Map" component={Map} />
     </Drawer.Navigator>
   );
 }
