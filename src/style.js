@@ -3,33 +3,30 @@ import { StyleSheet } from "react-native";
 
 export default AppStyle = {
   containerView: {
-    flex: 1
-  },
-  loginScreenContainer: {
-    flex: 1
+    width: "100%",
+    height: "100%",
   },
   logoText: {
     fontSize: 40,
     fontWeight: "800",
     marginTop: 150,
     marginBottom: 30,
-    textAlign: "center"
+    textAlign: "center",
   },
   loginFormView: {
-    flex: 1
+    flex: 1,
+    // width:'100%',
   },
   loginFormTextInput: {
-    height: 43,
     fontSize: 14,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "#eaeaea",
     backgroundColor: "#fafafa",
     paddingLeft: 10,
-    marginLeft: 15,
-    marginRight: 15,
+    paddingRight: 10,
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
   },
   loginButton: {
     backgroundColor: "#3897f1",
@@ -39,17 +36,57 @@ export default AppStyle = {
     marginLeft: 15,
     marginRight: 15,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   textLoginButton: {
     color: "white",
     fontSize: 15,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   fbLoginButton: {
     height: 45,
     marginTop: 10,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+  },
+  regFormView: {
+    flex: 1,
+    // width:'100%',
+  },
+  registerRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  regFormTextInput: {
+    fontSize: 12,
+    width: "70%",
+    backgroundColor: "#fafafa",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#eaeaea",
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  regButton: {
+    backgroundColor: "#3897f1",
+    borderRadius: 5,
+    height: 45,
+    width: 150,
+    marginTop: 10,
+    marginLeft: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  regText:{
+    color:'white',
+    fontSize: 10,
   },
   mapContainer: {
     position: "absolute",
@@ -60,22 +97,22 @@ export default AppStyle = {
     justifyContent: "flex-end",
     alignItems: "center",
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   map: {
     position: "absolute",
     top: "25%",
     left: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
   homeView: {
     width: "100%",
     height: "100%",
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   searchView: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buttonSearch: {
     marginBottom: 10,
@@ -87,10 +124,10 @@ export default AppStyle = {
     paddingBottom: 10,
     width: "75%",
     backgroundColor: "white",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   viewCity: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buttonCity: {
     marginBottom: 10,
@@ -100,44 +137,42 @@ export default AppStyle = {
     width: "25%",
     backgroundColor: "white",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   viewImageCity: {
     paddingTop: 10,
-    paddingLeft: 5
+    paddingLeft: 5,
   },
   imageCity: {
     height: 10,
-    width: 10
+    width: 10,
   },
-  location: {
-
-  },
-  locationView:{
-    flexDirection:'row'
+  location: {},
+  locationView: {
+    flexDirection: "row",
   },
 
   buttonLocation: {},
   locationText: {
     paddingLeft: 10,
-    paddingBottom:10,
+    paddingBottom: 10,
     fontSize: 8,
-    width:'90%',
+    width: "90%",
   },
-  imageLocationView:{
-    width:'5%',
+  imageLocationView: {
+    width: "5%",
   },
-  imageLocation:{
-    width:20,
-    height:20,
-    marginTop:5
+  imageLocation: {
+    width: 20,
+    height: 20,
+    marginTop: 5,
   },
-  imageLocationViewNext:{
-    width:'5%',
+  imageLocationViewNext: {
+    width: "5%",
   },
-  imageLocationNext:{
-    width:10,
-    height:10,
-    marginTop:4,
+  imageLocationNext: {
+    width: 10,
+    height: 10,
+    marginTop: 4,
   },
 };
