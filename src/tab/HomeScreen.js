@@ -8,7 +8,6 @@ import {
   ScrollView,
   FlatList,
   Dimensions,
-  TextInput,
   ActivityIndicator,
   Alert,
 } from "react-native";
@@ -38,6 +37,7 @@ export class HomeScreen extends Component {
       longitude: undefined,
       address: "",
       urlApi: "http://192.168.1.227:8090/api/Home/",
+      urlImage: "http://192.168.1.227:8090",
     };
     OneSignal.init("4cf4ecb2-f26f-4e80-b4f4-49c48d27e04d");
     OneSignal.addEventListener("received", this.onReceived);
@@ -50,19 +50,20 @@ export class HomeScreen extends Component {
       Geolocation.requestAuthorization();
       Geolocation.getCurrentPosition(
         async (position) => {
-          // console.log(position.coords);
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          // console.log("initialPosition", this.state.latitude);
-          const address = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCue0oSx3xls6KhVXuBoquyO-AsUySAmJE`
-          );
-          let json = await address.json();
-          // console.log("address", json.results[0].formatted_address);
-          if (json.results[0]) {
-            this.setState({ address: json.results[0].formatted_address });
+          if (position) {
+            this.setState({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+
+            const address = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCue0oSx3xls6KhVXuBoquyO-AsUySAmJE`
+            );
+
+            let json = await address.json();
+            if (json.results[0]) {
+              this.setState({ address: json.results[0].formatted_address });
+            }
           }
         },
         (error) => Alert.alert("Error", JSON.stringify(error)),
@@ -124,36 +125,90 @@ export class HomeScreen extends Component {
 
   async loadDataTheLoai() {
     try {
-      const response = await axios.get(
-        "http://192.168.1.227:8090/api/Home/GetAllDmTheLoai"
-      );
+      const response = await axios.get(`${this.state.urlApi}GetAllDmTheLoai`);
       this.setState({ data: response.data });
     } catch (error) {
       Alert.alert("Load the loai loi:", error);
     }
   }
 
-  renderItem = (item, index) => {
+  renderItemBoSuuTap = (item, index) => {
     return (
       <View
-        key={index}
-        style={{ width: 100, alignItems: "center", paddingTop: 10 }}
+        key={`BST_${item.Id}`}
+        style={{
+          width: 100,
+          height: 90,
+          marginTop: 10,
+          borderWidth: 1,
+          borderRadius: 5,
+          borderColor: "#eae8e8",
+          paddingLeft: 5,
+          paddingRight: 5,
+          paddingBottom: 5,
+          marginRight: 5,
+          marginBottom: 10,
+        }}
       >
         <TouchableOpacity
-          style={{ width: 100, alignItems: "center" }}
+          style={{ alignItems: "center" }}
           onPress={() => {
             this.setState({ selectedIndex: index });
           }}
         >
-          {/* <Image
-            source={{ uri:`${this.state.urlApi}item.HINH_ANH`}}
+          <Image
+            source={{ uri: `${this.state.urlImage + item.HINH_ANH}` }}
             style={{ width: 40, height: 40 }}
             resizeMode={"stretch"}
-          /> */}
+          />
           <ControlText
             style={{
               textAlign: "center",
               color: this.state.selectedIndex === index ? "red" : "black",
+              fontSize: 8,
+            }}
+          >
+            {item.TEN_LOAI}
+          </ControlText>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  renderItemTheLoai = (item, index) => {
+    return (
+      <View
+        key={item.Id}
+        style={{
+          width: 100,
+          height: 90,
+          marginTop: 10,
+          borderWidth: 1,
+          borderRadius: 5,
+          borderColor: "#eae8e8",
+          paddingLeft: 5,
+          paddingRight: 5,
+          paddingBottom: 5,
+          marginRight: 5,
+          marginBottom: 10,
+        }}
+      >
+        <TouchableOpacity
+          style={{ alignItems: "center" }}
+          onPress={() => {
+            this.setState({ selectedIndex: index });
+          }}
+        >
+          <Image
+            source={{ uri: `${this.state.urlImage + item.HINH_ANH}` }}
+            style={{ width: 40, height: 40 }}
+            resizeMode={"stretch"}
+          />
+          <ControlText
+            style={{
+              textAlign: "center",
+              color: this.state.selectedIndex === index ? "red" : "black",
+              fontSize: 8,
             }}
           >
             {item.TEN_LOAI}
@@ -174,7 +229,7 @@ export class HomeScreen extends Component {
       "https://scx1.b-cdn.net/csz/news/800/2019/2-nature.jpg",
     ];
 
-    const a = ["Gan toi", "Ban chay", "Danh gia"];
+    const a = ["Gần tôi", "Bán chạy", "Đánh giá"];
     //images.push()
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#f0f9ff" }}>
@@ -272,22 +327,72 @@ export class HomeScreen extends Component {
               ImageComponentStyle={{ borderRadius: 5 }}
               imageLoadingColor="#D8A962"
             />
+
             <View style={{ width: "100%" }}>
               <FlatList
                 horizontal={true}
                 data={this.state.data}
-                renderItem={({ item, index }) => this.renderItem(item, index)}
+                renderItem={({ item, index }) =>
+                  this.renderItemTheLoai(item, index)
+                }
                 keyExtractor={(item, index) => "key" + item.id}
               />
+
+              {/* Bộ sưu tập */}
+              <View
+                style={{
+                  height: 10,
+                  width: "100%",
+                  backgroundColor: "#eeeeee",
+                }}
+              />
+              <View style={{ marginTop: 5, marginBottom: 5, width: "100%" }}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{ fontSize: 8, fontWeight: '200', width: "50%" }}
+                  >
+                    Bộ sưu tập
+                  </Text>
+                  <TouchableOpacity style={{ width: "50%" }}>
+                    <Text style={{ fontSize: 8, textAlign: "right" }}>
+                      Xem thêm >
+                    </Text>
+                  </TouchableOpacity>
+                  <FlatList
+                    horizontal={true}
+                    data={this.state.data}
+                    renderItem={({ item, index }) =>
+                      this.renderItemBoSuuTap(item, index)
+                    }
+                    keyExtractor={(item, index) => "key" + item.id}
+                  />
+                </View>
+              </View>
+              {/* end Bộ sưu tập */}
+
+              {/* Tab  */}
+              <View
+                style={{
+                  height: 10,
+                  width: "100%",
+                  backgroundColor: "#eeeeee",
+                }}
+              ></View>
               <View
                 style={{ marginTop: 16, flexDirection: "row", width: "100%" }}
               >
                 {a.map((item, index) => {
+                  if (!__DEV__) {
+                    console.log();
+                  }
+
+                  console.log("renderItemTheLoai index:", index);
                   return (
                     <TouchableOpacity
                       style={{
                         width: `${100 / a.length}%`,
                         alignItems: "center",
+                        marginRight: 10,
                       }}
                       onPress={() => {
                         this.setState({ tabIndex: index });
@@ -298,13 +403,15 @@ export class HomeScreen extends Component {
                         style={{
                           color:
                             this.state.tabIndex === index ? "red" : "black",
+                          fontSize: 8,
                         }}
                       >
                         {item}
                       </ControlText>
+
                       <View
                         style={{
-                          width: "100%",
+                          width: "50%",
                           height: 1,
                           backgroundColor:
                             this.state.tabIndex === index
@@ -316,6 +423,7 @@ export class HomeScreen extends Component {
                   );
                 })}
               </View>
+              {/* end tab */}
             </View>
           </ScrollView>
         </View>
