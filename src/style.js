@@ -84,8 +84,8 @@ export default AppStyle = {
     justifyContent: "center",
     alignItems: "center",
   },
-  regText:{
-    color:'white',
+  regText: {
+    color: 'white',
     fontSize: 10,
   },
   mapContainer: {
@@ -175,4 +175,69 @@ export default AppStyle = {
     height: 10,
     marginTop: 4,
   },
+  productView: {
+    height: 150,
+    marginTop: 10,
+    paddingLeft: 5,
+    paddingRight: 50,
+    paddingBottom: 5,
+    flexDirection: 'row',
+
+  },
+  product: {
+    flexDirection: 'column'
+  },
+  productTitle: {
+    paddingLeft: 10,
+    fontSize: 14,
+  },
+  productAdd: {
+    flexDirection: 'row',
+    paddingTop: 10,
+    paddingLeft: 10,
+    alignItems: 'center',
+  },
+  productIconAdd: {
+    width: 30,
+    height: 30
+  },
+  productNumber: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 16
+  },
+  viewDelivery: {
+    borderWidth: 1,
+    borderColor: '#ebebeb',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  buttonDelivery: {
+    borderWidth: 1,
+    borderColor: '#fddfdf',
+    borderRadius: 15,
+    backgroundColor: '#f70000',
+    justifyContent: 'center',
+
+  },
+  textDelivery: {
+    textAlign: 'center',
+    color: 'white'
+  },
+  viewButtonDelivery: {
+    width: "40%",
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewButtonCart: {
+    width: "60%",
+    paddingLeft: 10,
+    //justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  textViewButtonCart: {
+    marginLeft: 10
+  }
 };

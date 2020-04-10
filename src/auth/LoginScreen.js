@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import AppStyle from "../style";
 import { CustomHeader } from "../index";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios from "axios";
 
 export class LoginScreen extends Component {
   constructor(props) {
@@ -26,15 +27,33 @@ export class LoginScreen extends Component {
   }
 
   async componentDidMount() {
-    let UID_object = {
-      name: 'http://192.168.1.227:8090/api/Home/',
+    this.getToken();
+    const Config_object = {
+      apiUrl: "http://192.168.1.227:8090/api/Home/",
+      urlImage: "http://192.168.1.227:8090",
     };
-    await AsyncStorage.setItem("ApiUrl",JSON.stringify(UID_object));
-    apiUrl = AsyncStorage.getItem("ApiUrl");
-
+    await AsyncStorage.setItem('apiUrl',JSON.stringify(Config_object));
     const account = await AsyncStorage.getItem("account");
     if (account) {
-      // this.props.navigation.navigate("HomeApp");
+      this.props.navigation.navigate("HomeApp");
+    }
+  }
+
+  getToken(){
+    try {
+      axios({
+        method: 'GET',
+        url: "http://192.168.1.227:8090/api/Home/GetToken"
+    }).then((response) => {
+      AsyncStorage.setItem('token',JSON.stringify(response.data));
+
+    }).catch(function (error) {
+        console.log("!!!!!!!!!!!!!LoginScreen GET TOKEN ERROR!!!!!!!!!!!\n")
+        console.log(error);
+    });
+    } catch (error) {
+      console.log("!!!!!!!!!!!!!GET TOKEN ERROR!!!!!!!!!!!\n")
+        console.log(error);
     }
   }
 
@@ -46,7 +65,7 @@ export class LoginScreen extends Component {
     try {
       await AsyncStorage.setItem("account", JSON.stringify(account));
       this.props.navigation.navigate("HomeApp");
-    } catch (error) {}
+    } catch (error) { }
   };
 
   onRegister = () => {
@@ -95,7 +114,7 @@ export class LoginScreen extends Component {
                   secureTextEntry={true}
                   onChangeText={
                     (pass) => this.setState({ pass: pass })
-                }
+                  }
                 />
                 <TouchableOpacity
                   style={AppStyle.loginButton}

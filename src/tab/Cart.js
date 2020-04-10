@@ -28,7 +28,7 @@ export class Cart extends Component {
     this.props.navigation.addListener("focus",async () => {
       const name = await AsyncStorage.getItem("name") || "";
       this.setState({ name: name });
-      alert(this.state.name);
+      
     })
   }
 

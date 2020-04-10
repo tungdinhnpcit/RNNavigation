@@ -22,6 +22,7 @@ import { NotificationsScreen,Map } from "./src/drawer";
 import { RegisterScreen, LoginScreen } from "./src/auth";
 import { IMAGE } from "./src/constant/Image";
 import Search from './src/tab/Search'
+import ProductDetail from './src/component/ProductDetail'
 
 //diable warning
 //console.disableYellowBox=true;
@@ -111,6 +112,7 @@ function DrawerNavigator({ navigation }) {
       <Drawer.Screen name="MenuTab" component={TabNavigator} />
       <Drawer.Screen name="Notifications" component={NotificationsScreen} />
       <Drawer.Screen name="Map" component={Map} />
+      <Drawer.Screen name="ProductDetail" component={ProductDetail} />
     </Drawer.Navigator>
   );
 }

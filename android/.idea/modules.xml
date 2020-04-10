@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Navigation.iml" filepath="$PROJECT_DIR$/Navigation.iml" group="Navigation" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Navigation/app" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/async-storage/android/react-native-community_async-storage.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/async-storage/android/react-native-community_async-storage.iml" group="Navigation/react-native-community_async-storage" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/geolocation/android/react-native-community_geolocation.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/geolocation/android/react-native-community_geolocation.iml" group="Navigation/react-native-community_geolocation" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/masked-view/android/react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/masked-view/android/react-native-community_masked-view.iml" group="Navigation/react-native-community_masked-view" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-fast-image/android/react-native-fast-image.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-fast-image/android/react-native-fast-image.iml" group="Navigation/react-native-fast-image" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-firebase/android/react-native-firebase.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-firebase/android/react-native-firebase.iml" group="Navigation/react-native-firebase" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-geolocation-service/android/react-native-geolocation-service.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-geolocation-service/android/react-native-geolocation-service.iml" group="Navigation/react-native-geolocation-service" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-gesture-handler/android/react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-gesture-handler/android/react-native-gesture-handler.iml" group="Navigation/react-native-gesture-handler" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-location/android/react-native-location.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-location/android/react-native-location.iml" group="Navigation/react-native-location" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-maps/lib/android/react-native-maps.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-maps/lib/android/react-native-maps.iml" group="Navigation/react-native-maps" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-onesignal/android/react-native-onesignal.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-onesignal/android/react-native-onesignal.iml" group="Navigation/react-native-onesignal" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-permissions/android/react-native-permissions.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-permissions/android/react-native-permissions.iml" group="Navigation/react-native-permissions" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-push-notification/android/react-native-push-notification.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-push-notification/android/react-native-push-notification.iml" group="Navigation/react-native-push-notification" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/react-native-reanimated.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-reanimated/android/react-native-reanimated.iml" group="Navigation/react-native-reanimated" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-safe-area-context/android/react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-safe-area-context/android/react-native-safe-area-context.iml" group="Navigation/react-native-safe-area-context" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-screens/android/react-native-screens.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-screens/android/react-native-screens.iml" group="Navigation/react-native-screens" />
+    </modules>
+  </component>
+</project>

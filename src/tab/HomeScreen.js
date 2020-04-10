@@ -10,6 +10,11 @@ import {
   Dimensions,
   ActivityIndicator,
   Alert,
+  Platform,
+  PermissionsAndroid,
+  Modal,
+  NativeModules,
+  requireNativeComponent
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { CustomHeader } from "../index";
@@ -17,12 +22,18 @@ import ControlText from "../component/ControlText";
 import { SliderBox } from "react-native-image-slider-box";
 const { width } = Dimensions.get("window");
 import * as Progress from "react-native-progress";
+
 import Geolocation from "@react-native-community/geolocation";
 import OneSignal from "react-native-onesignal";
 import AppStyle from "../style";
 import { IMAGE } from "../constant/Image";
 import PushNotification from "react-native-push-notification";
 import axios from "axios";
+import debounce from "lodash/debounce";
+const ToastExample = NativeModules.ToastExample;
+export { ToastExample };
+import CustomView from "./CustomView"
+//const AppStyle= Platform.OS === "IOS" ? AppStyle: AppStyle
 
 export class HomeScreen extends Component {
   constructor(props) {
@@ -38,6 +49,10 @@ export class HomeScreen extends Component {
       address: "",
       urlApi: "http://192.168.1.227:8090/api/Home/",
       urlImage: "http://192.168.1.227:8090",
+      isShowModal: false,
+      temp: [],
+      config: {},
+      token: ''
     };
     OneSignal.init("4cf4ecb2-f26f-4e80-b4f4-49c48d27e04d");
     OneSignal.addEventListener("received", this.onReceived);
@@ -45,11 +60,46 @@ export class HomeScreen extends Component {
     OneSignal.addEventListener("ids", this.onIds);
   }
 
-  async componentDidMount() {
+  requestLocationPermission = async () => {
     try {
-      Geolocation.requestAuthorization();
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          'title': 'Example App',
+          'message': 'Example App access to your location '
+        }
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the location")
+        // alert("You can use the location");
+      } else {
+        console.log("location permission denied")
+      }
+    } catch (err) {
+      console.log('requestLocationPermission', JSON.stringify(err))
+    }
+  }
+
+  async componentDidMount() {
+    //ToastExample.show()
+
+    await AsyncStorage.setItem('API', 'http:');
+    AsyncStorage.getItem('apiUrl').then((value) => {
+      this.setState({
+        config: JSON.parse(value)
+      });
+    });
+
+    try {
+      if (Platform.OS === "android") {
+        this.requestLocationPermission();
+      } else {
+        Geolocation.requestAuthorization();
+      }
+
       Geolocation.getCurrentPosition(
         async (position) => {
+
           if (position) {
             this.setState({
               latitude: position.coords.latitude,
@@ -57,29 +107,31 @@ export class HomeScreen extends Component {
             });
 
             const address = await fetch(
-              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCue0oSx3xls6KhVXuBoquyO-AsUySAmJE`
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.latitude},${this.state.longitude}&key=AIzaSyDTY8kR_buT28WOpOKtJCbqa8uX5T1ue3s`
             );
-
+            console.log('position', address)
             let json = await address.json();
             if (json.results[0]) {
               this.setState({ address: json.results[0].formatted_address });
             }
           }
         },
-        (error) => Alert.alert("Error", JSON.stringify(error)),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        (error) => {
+          Alert.alert("Error", JSON.stringify(error))
+        },
+        { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
       );
 
       this.loadDataTheLoai();
     } catch (error) {
-      Alert.alert("componentDidMount Error", error);
+      console.log('componentDidmount error', JSON.stringify(error));
     }
   }
 
   onOpened(openResult) {
-    // console.log("Message: ", openResult.notification.payload.body);
-    // console.log("Data: ", openResult.notification.payload.additionalData);
-    // console.log("openResult: ", openResult);
+    console.log("Message: ", openResult.notification.payload.body);
+    console.log("Data: ", openResult.notification.payload.additionalData);
+    console.log("openResult: ", openResult);
   }
 
   onReceived(notification) {
@@ -120,22 +172,57 @@ export class HomeScreen extends Component {
   }
 
   onIds(device) {
-    // console.log("Device info: ", device);
+    console.log("Device info: ", device);
   }
 
-  async loadDataTheLoai() {
-    try {
-      const response = await axios.get(`${this.state.urlApi}GetAllDmTheLoai`);
-      this.setState({ data: response.data });
-    } catch (error) {
-      Alert.alert("Load the loai loi:", error);
-    }
-  }
+  renderBoSuuTap = () => {
+    return (
+      <View>
+
+        {/* Bộ sưu tập */}
+        <View style={{
+          height: 10,
+          width: "100%",
+          backgroundColor: "#eeeeee",
+        }}></View>
+        <View style={{ marginTop: 5, marginBottom: 5, width: "100%" }}>
+          <TouchableOpacity
+            onPress={() => {
+              // this.setState({ selectedIndex: index });
+              this.setState({ isShowModal: !this.state.isShowModal });
+            }}>
+            <Text>
+              Xem thêm
+            </Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={{ fontSize: 10, fontWeight: '200', width: "50%" }}
+            >
+              Bộ sưu tập
+          </Text>
+            <TouchableOpacity style={{ width: "50%" }}>
+              <Text style={{ fontSize: 10, textAlign: "right" }}>
+                Xem thêm >
+            </Text>
+            </TouchableOpacity>
+            <FlatList
+              horizontal={true}
+              data={this.props.data}
+              renderItem={({ item, index }) =>
+                this.renderItemBoSuuTap(item, index)
+              }
+              keyExtractor={(item) => "keybst" + item.id}
+            />
+          </View>
+        </View>
+      </View>
+    )
+  };
 
   renderItemBoSuuTap = (item, index) => {
     return (
       <View
-        key={`BST_${item.Id}`}
         style={{
           width: 100,
           height: 90,
@@ -153,11 +240,12 @@ export class HomeScreen extends Component {
         <TouchableOpacity
           style={{ alignItems: "center" }}
           onPress={() => {
-            this.setState({ selectedIndex: index });
+            // this.setState({ selectedIndex: index });
+            this.setState({ isShowModal: !this.state.isShowModal });
           }}
         >
           <Image
-            source={{ uri: `${this.state.urlImage + item.HINH_ANH}` }}
+            source={{ uri: `${this.props.urlImage + item.HINH_ANH}` }}
             style={{ width: 40, height: 40 }}
             resizeMode={"stretch"}
           />
@@ -174,11 +262,46 @@ export class HomeScreen extends Component {
       </View>
     );
   };
+
+  onPress = () => {
+    debounce(() => {
+      // To do something
+
+    }, 400);
+  }
+
+  async loadDataTheLoai() {
+    try {
+      await AsyncStorage.getItem('token').then((value) => {
+        this.setState({ token: JSON.parse(value).data });
+      });
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.state.token}`
+      }
+
+      await axios({
+        method: 'GET',
+        url: `${this.state.urlApi}GetAllDmTheLoai`,
+        headers: headers
+      }).then((response) => {
+        this.setState({ data: response.data })
+      }
+      ).catch(function (error) {
+        console.log("HomeScreen loadDataTheLoai ERROR\n")
+        console.log(error);
+      });;
+    } catch (error) {
+      console.log("HomeScreen loadDataTheLoai ERROR\n")
+      console.log(error);
+    }
+  }
 
   renderItemTheLoai = (item, index) => {
     return (
       <View
-        key={item.Id}
+        key={"TL_" + item.Id}
         style={{
           width: 100,
           height: 90,
@@ -195,9 +318,13 @@ export class HomeScreen extends Component {
       >
         <TouchableOpacity
           style={{ alignItems: "center" }}
-          onPress={() => {
-            this.setState({ selectedIndex: index });
-          }}
+          onPress={debounce(() => {
+            console.log('ID pass', item.Id);
+            this.props.navigation.navigate('ProductDetail'
+              , {
+                GroupId: item.Id
+              })
+          }, 400)}
         >
           <Image
             source={{ uri: `${this.state.urlImage + item.HINH_ANH}` }}
@@ -213,11 +340,96 @@ export class HomeScreen extends Component {
           >
             {item.TEN_LOAI}
           </ControlText>
+          {/* <View style={{ flexDirection: "row", alignContent: "space-between" }}>
+            <TouchableOpacity onPress={() => this.down(item)}>
+              <ControlText>GIAM</ControlText>
+            </TouchableOpacity>
+            <ControlText>{item.count || 0}</ControlText>
+            <TouchableOpacity onPress={() => this.up(item)}>
+              <ControlText>TANG</ControlText>
+            </TouchableOpacity>
+          </View> */}
+
         </TouchableOpacity>
       </View>
     );
   };
 
+  up = (item) => {
+    const data = this.state.data || [];
+    for (let i = 0; i < data.length; i++) {
+      if (item.Id === data[i].Id) {
+        data[i].count = (data[i].count || 0) + 1;
+        this.setState({ data: data });
+        return;
+      }
+    }
+  }
+
+  down = (item) => {
+    const data = this.state.data || [];
+    for (let i = 0; i < data.length; i++) {
+      if (item.Id === data[i].Id) {
+        data[i].count = (data[i].count || 0) - 1;
+        this.setState({ data: data });
+        return;
+      }
+    }
+  }
+
+  renderTab = (a) => {
+    return (
+      <View>
+        <View
+          style={{
+            height: 10,
+            width: "100%",
+            backgroundColor: "#eeeeee",
+          }}
+        ></View>
+        <View
+          style={{ marginTop: 16, flexDirection: "row", width: "100%" }}
+        >
+          {a.map((item, index) => {
+            return (
+              <TouchableOpacity
+                style={{
+                  width: `${100 / a.length}%`,
+                  alignItems: "center",
+                  marginRight: 10,
+                }}
+                onPress={() => {
+                  this.setState({ tabIndex: index });
+                }}
+                key={'Tab_' + index}
+              >
+                <ControlText
+                  style={{
+                    color:
+                      this.state.tabIndex === index ? "red" : "black",
+                    fontSize: 10,
+                  }}
+                >
+                  {item}
+                </ControlText>
+
+                <View
+                  style={{
+                    width: "50%",
+                    height: 1,
+                    backgroundColor:
+                      this.state.tabIndex === index
+                        ? "red"
+                        : "transparent",
+                  }}
+                ></View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    )
+  }
   onCitySelected = (city) => {
     this.setState({ city: city });
   };
@@ -229,10 +441,12 @@ export class HomeScreen extends Component {
       "https://scx1.b-cdn.net/csz/news/800/2019/2-nature.jpg",
     ];
 
-    const a = ["Gần tôi", "Bán chạy", "Đánh giá"];
+    const arrayTab = ["Gần tôi", "Bán chạy", "Đánh giá"];
     //images.push()
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#f0f9ff" }}>
+
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#f0f9ff", width: "100%", height: "100%" }}>
+
         <CustomHeader
           title="Trang chủ"
           isHome={true}
@@ -306,6 +520,7 @@ export class HomeScreen extends Component {
           {/* End vị trí */}
 
           <ScrollView>
+            <CustomView style={{ width: 200, height: 200 }} />
             <SliderBox
               images={images}
               parentWidth={width - 16 - 16}
@@ -335,95 +550,13 @@ export class HomeScreen extends Component {
                 renderItem={({ item, index }) =>
                   this.renderItemTheLoai(item, index)
                 }
-                keyExtractor={(item, index) => "key" + item.id}
+                keyExtractor={(item, index) => "keyTl" + index}
               />
 
-              {/* Bộ sưu tập */}
-              <View
-                style={{
-                  height: 10,
-                  width: "100%",
-                  backgroundColor: "#eeeeee",
-                }}
-              />
-              <View style={{ marginTop: 5, marginBottom: 5, width: "100%" }}>
-                <View style={{ flexDirection: "row" }}>
-                  <Text
-                    style={{ fontSize: 8, fontWeight: '200', width: "50%" }}
-                  >
-                    Bộ sưu tập
-                  </Text>
-                  <TouchableOpacity style={{ width: "50%" }}>
-                    <Text style={{ fontSize: 8, textAlign: "right" }}>
-                      Xem thêm >
-                    </Text>
-                  </TouchableOpacity>
-                  <FlatList
-                    horizontal={true}
-                    data={this.state.data}
-                    renderItem={({ item, index }) =>
-                      this.renderItemBoSuuTap(item, index)
-                    }
-                    keyExtractor={(item, index) => "key" + item.id}
-                  />
-                </View>
-              </View>
-              {/* end Bộ sưu tập */}
+              {this.renderBoSuuTap()}
 
-              {/* Tab  */}
-              <View
-                style={{
-                  height: 10,
-                  width: "100%",
-                  backgroundColor: "#eeeeee",
-                }}
-              ></View>
-              <View
-                style={{ marginTop: 16, flexDirection: "row", width: "100%" }}
-              >
-                {a.map((item, index) => {
-                  if (!__DEV__) {
-                    console.log();
-                  }
+              {this.renderTab(arrayTab)}
 
-                  console.log("renderItemTheLoai index:", index);
-                  return (
-                    <TouchableOpacity
-                      style={{
-                        width: `${100 / a.length}%`,
-                        alignItems: "center",
-                        marginRight: 10,
-                      }}
-                      onPress={() => {
-                        this.setState({ tabIndex: index });
-                      }}
-                      key={index}
-                    >
-                      <ControlText
-                        style={{
-                          color:
-                            this.state.tabIndex === index ? "red" : "black",
-                          fontSize: 8,
-                        }}
-                      >
-                        {item}
-                      </ControlText>
-
-                      <View
-                        style={{
-                          width: "50%",
-                          height: 1,
-                          backgroundColor:
-                            this.state.tabIndex === index
-                              ? "red"
-                              : "transparent",
-                        }}
-                      ></View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-              {/* end tab */}
             </View>
           </ScrollView>
         </View>
@@ -440,6 +573,22 @@ export class HomeScreen extends Component {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         ) : null}
+        {/* <Modal
+          style={{height: "90%"}}
+          animationType="slide"
+          visible={this.state.isShowModal}>
+          <View>
+            <ControlText>{"Ban co muon thanh toan khong ?"}</ControlText>
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity style={{ width: "50%" }}>
+                <ControlText>{"Ok"}</ControlText>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ width: "50%" }}>
+                <ControlText>{"Huy"}</ControlText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal> */}
       </SafeAreaView>
     );
   }

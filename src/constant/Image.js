@@ -11,5 +11,9 @@ const IMAGE = {
   ICON_DOWNARROW:require('../images/down-arrow.png'),
   ICON_NEXTARROW:require('../images/nextArrow.png'),
   ICON_LOCATION:require('../images/location.png'),
+  ICON_ADD:require('../images/addIcon.png'),
+  ICON_SUB:require('../images/subIcon.png'),
+  ICON_CARTDELIVERY:require('../images/iconCart.png'),
+
 };
 export {IMAGE};
