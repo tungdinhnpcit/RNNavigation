@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -8,18 +8,18 @@ import {
   Button,
   ScrollView,
 } from 'react-native';
-import { IMAGE} from './constant/Image'
+import { IMAGE } from './constant/Image'
 
 export class CustomDrawerContent extends Component {
   constructor(props) {
-        super(props);
-    }
-    
+    super(props);
+  }
+
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1 }}>
         <View
-          style={{height: 100, alignItems: 'center', justifyContent: 'center'}}>
+          style={{ height: 100, alignItems: 'center', justifyContent: 'center' }}>
           <Image
             source={IMAGE.ICON_PROFILE}
             style={{
@@ -30,36 +30,43 @@ export class CustomDrawerContent extends Component {
               resizeMode: 'contain',
             }}></Image>
         </View>
-        <ScrollView style={{marginLeft: 5}}>
+        <ScrollView style={{ marginLeft: 5 }}>
           <TouchableOpacity
-            style={{marginTop: 20}}
+            style={{ marginTop: 20 }}
             onPress={() => {
               this.props.navigation.navigate('MenuTab');
             }}>
             <Text>Menu Tab</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{marginTop: 20}}
+            style={{ marginTop: 20 }}
             onPress={() => {
               this.props.navigation.navigate('Notifications');
             }}>
             <Text>Notifications</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{marginTop: 20}}
+            style={{ marginTop: 20 }}
             onPress={() => {
               this.props.navigation.navigate('Map');
             }}>
             <Text>Map</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            onPress={() => {
+              this.props.navigation.navigate('CallAndroid');
+            }}>
+            <Text>Call Android Native</Text>
+          </TouchableOpacity>
         </ScrollView>
         <TouchableOpacity
-            style={{marginTop: 20, marginLeft:10}}
-            onPress={() => {
-              this.props.navigation.navigate('Login');
-            }}>
-            <Text>Logout</Text>
-          </TouchableOpacity>
+          style={{ marginTop: 20, marginLeft: 10 }}
+          onPress={() => {
+            this.props.navigation.navigate('Login');
+          }}>
+          <Text>Logout</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }

@@ -32,28 +32,28 @@ export class LoginScreen extends Component {
       apiUrl: "http://192.168.1.227:8090/api/Home/",
       urlImage: "http://192.168.1.227:8090",
     };
-    await AsyncStorage.setItem('apiUrl',JSON.stringify(Config_object));
+    await AsyncStorage.setItem('apiUrl', JSON.stringify(Config_object));
     const account = await AsyncStorage.getItem("account");
     if (account) {
       this.props.navigation.navigate("HomeApp");
     }
   }
 
-  getToken(){
+  getToken() {
     try {
       axios({
         method: 'GET',
         url: "http://192.168.1.227:8090/api/Home/GetToken"
-    }).then((response) => {
-      AsyncStorage.setItem('token',JSON.stringify(response.data));
+      }).then((response) => {
+        AsyncStorage.setItem('token', JSON.stringify(response.data));
 
-    }).catch(function (error) {
+      }).catch(function (error) {
         console.log("!!!!!!!!!!!!!LoginScreen GET TOKEN ERROR!!!!!!!!!!!\n")
         console.log(error);
-    });
+      });
     } catch (error) {
       console.log("!!!!!!!!!!!!!GET TOKEN ERROR!!!!!!!!!!!\n")
-        console.log(error);
+      console.log(error);
     }
   }
 

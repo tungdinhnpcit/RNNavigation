@@ -47,8 +47,8 @@ export class HomeScreen extends Component {
       latitude: undefined,
       longitude: undefined,
       address: "",
-      urlApi: "http://192.168.1.227:8090/api/Home/",
-      urlImage: "http://192.168.1.227:8090",
+      urlApi: "http://.228192.168.1.227:8090/api/Home/",
+      urlImage: "http://.228192.168.1.227:8090",
       isShowModal: false,
       temp: [],
       config: {},
@@ -286,6 +286,8 @@ export class HomeScreen extends Component {
         url: `${this.state.urlApi}GetAllDmTheLoai`,
         headers: headers
       }).then((response) => {
+        console.log('!!!!loadDataTheLoai!!!!')
+        console.log('DATA', response.data)
         this.setState({ data: response.data })
       }
       ).catch(function (error) {
@@ -324,7 +326,7 @@ export class HomeScreen extends Component {
               , {
                 GroupId: item.Id
               })
-          }, 400)}
+          }, 100)}
         >
           <Image
             source={{ uri: `${this.state.urlImage + item.HINH_ANH}` }}
@@ -520,7 +522,6 @@ export class HomeScreen extends Component {
           {/* End vị trí */}
 
           <ScrollView>
-            <CustomView style={{ width: 200, height: 200 }} />
             <SliderBox
               images={images}
               parentWidth={width - 16 - 16}

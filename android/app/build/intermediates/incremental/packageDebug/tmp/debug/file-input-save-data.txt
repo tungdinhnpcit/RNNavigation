@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Apr 10 20:59:09 ICT 2020
+#Sat Apr 11 22:32:13 ICT 2020
 56.path=lib/x86_64/libimagepipeline.so
 5.base=C\:\\Users\\Administrator\\Desktop\\OnlineShop\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0
 42.base=C\:\\Users\\Administrator\\Desktop\\OnlineShop\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0

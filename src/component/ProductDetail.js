@@ -26,6 +26,7 @@ export default class ProducDetail extends Component {
         super(props);
         this.state = {
             data: [],
+            cartData: [],
             apiUrl: "",
             GroupId: 0,
             config: {},
@@ -102,19 +103,25 @@ export default class ProducDetail extends Component {
                     <ControlText
                         style={{
                             marginLeft: 10,
-                            marginTop: 20,
+                            marginTop: 10,
                             fontSize: 14,
                         }}
                     >
                         {item.DON_GIA} đ
                     </ControlText>
-                    <View style={[AppStyle.productAdd]}>
-                        <TouchableOpacity>
+                    <View style={[{ justifyContent: 'center', alignItems: "center" }, AppStyle.productAdd]}>
+                        <TouchableOpacity onPress={() => { this.addItem(item) }}>
                             <Image source={IMAGE.ICON_ADD} style={AppStyle.productIconAdd}></Image>
                         </TouchableOpacity>
-                        <ControlText style={[{ width: windowWidth * 0.15 }, AppStyle.productNumber]}>0</ControlText>
-                        <TouchableOpacity >
+                        <ControlText style={[{ width: windowWidth * 0.15 }, AppStyle.productNumber]}>{item.count || 0}</ControlText>
+                        <TouchableOpacity onPress={() => { this.removeItem(item) }}>
                             <Image source={IMAGE.ICON_SUB} style={AppStyle.productIconAdd}></Image>
+                        </TouchableOpacity>
+
+                    </View>
+                    <View style={[{ width: windowWidth * 0.6, justifyContent: 'center', alignItems: "center", marginTop: 10 }, AppStyle.product]}>
+                        <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]} onPress={() => { this.addCart(item) }}>
+                            <ControlText style={AppStyle.textDelivery}>Add To Cart</ControlText>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -125,7 +132,7 @@ export default class ProducDetail extends Component {
 
     loadData() {
         try {
-            console.log('this.state.GroupId', this.state.GroupId);
+
             axios({
                 method: 'POST',
                 url: `${this.state.config.apiUrl}GetSanPhamTheoheLoai`,
@@ -147,6 +154,59 @@ export default class ProducDetail extends Component {
             });
         } catch (error) {
             Alert.alert("Load loadData loi:", JSON.stringify(error));
+        }
+    }
+
+    addItem = (item) => {
+        try {
+
+            const data = this.state.data || [];
+            for (let i = 0; i < data.length; i++) {
+                if (item.Id === data[i].Id) {
+                    data[i].count = (data[i].count || 0) + 1;
+                    this.setState({ data: data });
+                    return;
+                }
+            }
+        }
+        catch (error) {
+            console.log('!!!addItem error!!!', error);
+        }
+    }
+
+    removeItem = (item) => {
+        try {
+
+            const data = this.state.data || [];
+            for (let i = 0; i < data.length; i++) {
+                if (item.Id === data[i].Id) {
+                    if (data[i].count > 0) {
+                        data[i].count = (data[i].count || 0) - 1;
+                        this.setState({ data: data });
+                    }
+                    return;
+                }
+            }
+        }
+        catch (error) {
+            console.log('!!!removeItem error!!!', error);
+        }
+    }
+
+    addCart = (item) => {
+        try {
+
+            const data = this.state.data || [];
+            // for (let i = 0; i < data.length; i++) {
+            //     if (item.Id === data[i].Id) {
+            //         data[i].count = (data[i].count || 0) + 1;
+            //         this.setState({ data: data });
+            //         return;
+            //     }
+            // }
+        }
+        catch (error) {
+            console.log('!!!addItem error!!!', error);
         }
     }
 }
