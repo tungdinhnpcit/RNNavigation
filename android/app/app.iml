@@ -181,6 +181,7 @@
     <orderEntry type="module" module-name="android-react-native-fast-image" />
     <orderEntry type="module" module-name="android-react-native-geolocation-service" />
     <orderEntry type="module" module-name="android-react-native-gesture-handler" />
+    <orderEntry type="module" module-name="react-native-localization" />
     <orderEntry type="module" module-name="android-react-native-location" />
     <orderEntry type="module" module-name="android-react-native-maps" />
     <orderEntry type="module" module-name="android-react-native-permissions" />

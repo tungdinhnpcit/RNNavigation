@@ -16,14 +16,15 @@ import { CustomDrawerContent } from "./src";
 import {
   HomeScreen,
   HomeDetail,
-  Cart
-} from "./src/tab";
-import { NotificationsScreen, Map } from "./src/drawer";
-import { RegisterScreen, LoginScreen } from "./src/auth";
+  Cart,
+} from "./src/screens/main";
+import CallAndroid from "./src/screens/main/drawer/CallAndroid";
+import { NotificationsScreen, Map } from "./src/screens/main/drawer";
+import { RegisterScreen, LoginScreen } from "./src/screens/auth";
 import { IMAGE } from "./src/constant/Image";
-import Search from './src/tab/Search'
-import ProductDetail from './src/component/ProductDetail'
-import CallAndroid from './src/drawer/CallAndroid'
+import Search from './src/screens/main/Search'
+import ProductDetail from './src/screens/main/ProductDetail'
+import Strings from "./src/common/Strings";
 
 //diable warning
 //console.disableYellowBox=true;
@@ -122,6 +123,7 @@ function DrawerNavigator({ navigation }) {
 const StackApp = createStackNavigator();
 
 export default function App() {
+  Strings.setLanguage("en")
   return (
     <NavigationContainer>
       <StackApp.Navigator initialRouteName="Login">

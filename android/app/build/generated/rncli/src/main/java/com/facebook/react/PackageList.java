@@ -28,6 +28,8 @@ import io.invertase.firebase.RNFirebasePackage;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+// react-native-localization
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 // react-native-location
 import com.github.reactnativecommunity.location.RNLocationPackage;
 // react-native-maps
@@ -96,6 +98,7 @@ public class PackageList {
       new RNFirebasePackage(),
       new RNFusedLocationPackage(),
       new RNGestureHandlerPackage(),
+      new ReactNativeLocalizationPackage(),
       new RNLocationPackage(),
       new MapsPackage(),
       new ReactNativeOneSignalPackage(),

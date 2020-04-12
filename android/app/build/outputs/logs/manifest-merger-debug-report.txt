@@ -14,6 +14,7 @@ MERGED from [:react-native-community_masked-view] C:\Users\Administrator\Desktop
 MERGED from [:react-native-fast-image] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-fast-image\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-geolocation-service] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-geolocation-service\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-14:12
 MERGED from [:react-native-gesture-handler] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-localization] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-localization\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-maps] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-maps\lib\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [:react-native-permissions] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-permissions\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-push-notification] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
@@ -316,6 +317,8 @@ MERGED from [:react-native-geolocation-service] C:\Users\Administrator\Desktop\O
 MERGED from [:react-native-geolocation-service] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-geolocation-service\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-gesture-handler] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-gesture-handler] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-localization] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-localization\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-localization] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-localization\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-maps] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-maps\lib\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-maps] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-maps\lib\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-permissions] C:\Users\Administrator\Desktop\OnlineShop\node_modules\react-native-permissions\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
