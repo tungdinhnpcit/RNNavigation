@@ -176,7 +176,7 @@ export default AppStyle = {
     marginTop: 4,
   },
   productView: {
-    height: "25%",
+    height: 120,
     marginTop: 10,
     paddingLeft: 5,
     paddingRight: 50,

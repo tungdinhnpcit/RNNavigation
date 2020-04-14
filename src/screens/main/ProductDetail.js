@@ -17,7 +17,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 import AppStyle from "../../style";
 import { IMAGE } from "../../constant/Image";
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -48,8 +47,7 @@ export default class ProducDetail extends Component {
             });
             const { GroupId } = this.props.route.params;
             this.setState({ GroupId: GroupId })
-            this.loadData();
-
+            await this.loadData();
         })
     }
 
@@ -63,7 +61,7 @@ export default class ProducDetail extends Component {
                 />
                 <ScrollView>
                     <FlatList
-                        horizontal={true}
+                        horizontal={false}
                         data={this.state.data}
                         renderItem={({ item, index }) =>
                             this.renderItem(item, index)
@@ -71,7 +69,8 @@ export default class ProducDetail extends Component {
                         keyExtractor={(item, index) => "keyP" + index}
                     />
                 </ScrollView>
-                <View style={AppStyle.viewDelivery}>
+                {this.viewCart()}
+                {/* <View style={AppStyle.viewDelivery}>
                     <View style={{ width: "60%" }, AppStyle.viewButtonCart}>
                         <View style={{ width: 50, height: 50 }}>
                             <Image source={IMAGE.ICON_CARTDELIVERY}
@@ -87,7 +86,7 @@ export default class ProducDetail extends Component {
                             <ControlText style={AppStyle.textDelivery}>Giao hàng</ControlText>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
             </SafeAreaView>
         )
     }
@@ -121,16 +120,14 @@ export default class ProducDetail extends Component {
                         <TouchableOpacity onPress={() => { this.addItem(item) }}>
                             <Image source={IMAGE.ICON_ADD} style={AppStyle.productIconAdd}></Image>
                         </TouchableOpacity>
-                        <ControlText style={[{ width: windowWidth * 0.15 }, AppStyle.productNumber]}>{item.count || 0}</ControlText>
+                        {
+                            this.viewCount(item)
+                        }
+
                         <TouchableOpacity onPress={() => { this.removeItem(item) }}>
                             <Image source={IMAGE.ICON_SUB} style={AppStyle.productIconAdd}></Image>
                         </TouchableOpacity>
 
-                    </View>
-                    <View style={[{ width: windowWidth * 0.6, justifyContent: 'center', alignItems: "center", marginTop: 10 }, AppStyle.product]}>
-                        <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]} onPress={() => { this.addCart(item) }}>
-                            <ControlText style={AppStyle.textDelivery}>Add To Cart</ControlText>
-                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -156,6 +153,11 @@ export default class ProducDetail extends Component {
                     data: response.data
                 });
 
+                let data = {};
+                data.data = response.data;
+                this.setState({
+                    cart: data
+                });
             }).catch(function (error) {
                 console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!\n")
                 console.log(error);
@@ -167,44 +169,29 @@ export default class ProducDetail extends Component {
 
     addItem = (item) => {
         try {
-            let product = this.state.product || {};
-            product = item;
-            product.COUNT = product.COUNT++ || 1;
-            this.setState({ product: product });
+            let cart = this.state.cart;
+            let data = this.state.cart.data;
+            var index = data.indexOf(item);
+            if (index !== -1) {
+                if (cart.COUNT) {
+                    cart.COUNT++;
+                    cart.TOTAL += item.DON_GIA;
+                }
+                else {
+                    cart.COUNT = 1;
+                    cart.TOTAL = item.DON_GIA;
+                }
+                if (data[index].COUNT && data[index].COUNT > 0) {
+                    data[index].COUNT++;
+                    data[index].TOTAL += item.DON_GIA;
 
-            let cartCount = this.state.cartCount || [];
-            let cart = this.state.cart || [];
-            var index = cart.indexOf(item);
-            if (cartCount.COUNT != null) {
-
-
-                cartCount.COUNT++;
-                cartCount.TOTAL += item.DON_GIA;
-                this.setState({ cartCount: cartCount });
-                if (index !== -1) {
-                    cart[index].count++;
+                    cart.data = data;
                     this.setState({ cart: cart });
                 }
                 else {
-                    //add cart to empty cart
-                    item.count = 1;
-                    cart.push(item);
-                    this.setState({ cart: cart });
-                }
-            }
-            else {
-                cartCount.COUNT = 1;
-                cartCount.TOTAL = item.DON_GIA;
-                this.setState({ cartCount: cartCount });
-
-                if (index !== -1) {
-                    cart[index].count++;
-                    this.setState({ cart: cart });
-                }
-                else {
-                    //add cart to empty cart
-                    item.count = 1;
-                    cart.push(item);
+                    data[index].COUNT = 1;
+                    data[index].TOTAL = item.DON_GIA;
+                    cart.data = data;
                     this.setState({ cart: cart });
                 }
             }
@@ -216,31 +203,22 @@ export default class ProducDetail extends Component {
 
     removeItem = (item) => {
         try {
-            let cartCount = this.state.cartCount || [];
-            if (cartCount.COUNT > 0) {
-                let product = this.state.product || {};
-                product = item;
-                product.COUNT = product.COUNT-- || 1;
+            let cart = this.state.cart;
+            let data = this.state.cart.data;
+            var index = data.indexOf(item);
+            if (index !== -1) {
+                if (cart.COUNT && cart.COUNT > 0) {
+                    cart.COUNT--;
+                    cart.TOTAL -= item.DON_GIA;
+                }
+                if (data[index].COUNT && data[index].COUNT > 0) {
+                    data[index].COUNT--;
+                    data[index].TOTAL -= item.DON_GIA;
 
-                let cart = this.state.cart || [];
-                var index = cart.indexOf(item);
-
-                if (cartCount.COUNT != null) {
-                    cartCount.COUNT--;
-                    cartCount.TOTAL -= item.DON_GIA;
-                    this.setState({ cartCount: cartCount });
-
-
-                    if (index !== -1) {
-                        if (cart[index].count > 0) {
-                            cart[index].count--;
-                            cart.splice(index, 1);
-                            this.setState({ cart: cart });
-                        }
-                    }
+                    cart.data = data;
+                    this.setState({ cart: cart });
                 }
             }
-
         }
         catch (error) {
             console.log('!!!removeItem error!!!', error);
@@ -262,5 +240,64 @@ export default class ProducDetail extends Component {
         catch (error) {
             console.log('!!!addItem error!!!', error);
         }
+    }
+
+    viewCount = (item) => {
+        var data = this.state.cart.data;
+        if (data) {
+            var index = data.indexOf(item);
+            return (
+                <ControlText style={[{ width: windowWidth * 0.15 }, AppStyle.productNumber]} >
+                    {data[index].COUNT || 0}</ControlText >
+            )
+        }
+        return (
+            <ControlText style={[{ width: windowWidth * 0.15 }, AppStyle.productNumber]} >0</ControlText >
+        )
+    }
+
+    viewCart = () => {
+        var cart = this.state.cart;
+        if (cart && cart.COUNT) {
+            return (
+                <View style={AppStyle.viewDelivery}>
+                    <View style={{ width: "60%" }, AppStyle.viewButtonCart}>
+                        <View style={{ width: 50, height: 50 }}>
+                            <Image source={IMAGE.ICON_CARTDELIVERY}
+                                style={{ width: 40, height: 40 }} resizeMode="contain"></Image>
+                            <View style={{ position: "absolute", right: 0, top: 0, backgroundColor: "red", width: 20, height: 20, borderRadius: 15, alignItems: "center", justifyContent: "center" }}>
+                                <ControlText style={{ fontSize: 12, color: "white" }}>{cart.COUNT}</ControlText>
+                            </View>
+                        </View>
+                        <ControlText style={AppStyle.textViewButtonCart}>{cart.TOTAL} đ</ControlText>
+                    </View>
+                    <View style={{ width: windowWidth * 0.4 }, AppStyle.viewButtonDelivery}>
+                        <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]}>
+                            <ControlText style={AppStyle.textDelivery}>Giao hàng</ControlText>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+        return (
+            <View style={AppStyle.viewDelivery}>
+                <View style={{ width: "60%" }, AppStyle.viewButtonCart}>
+                    <View style={{ width: 50, height: 50 }}>
+                        <Image source={IMAGE.ICON_CARTDELIVERY}
+                            style={{ width: 40, height: 40 }} resizeMode="contain"></Image>
+                        <View style={{ position: "absolute", right: 0, top: 0, backgroundColor: "red", width: 20, height: 20, borderRadius: 15, alignItems: "center", justifyContent: "center" }}>
+                            <ControlText style={{ fontSize: 12, color: "white" }}>0</ControlText>
+                        </View>
+                    </View>
+                    <ControlText style={AppStyle.textViewButtonCart}>0 đ</ControlText>
+                </View>
+                <View style={{ width: windowWidth * 0.4 }, AppStyle.viewButtonDelivery}>
+                    <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]}>
+                        <ControlText style={AppStyle.textDelivery}>Giao hàng</ControlText>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+        )
     }
 }
