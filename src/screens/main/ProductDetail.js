@@ -7,9 +7,7 @@ import {
     ScrollView,
     FlatList,
     Dimensions,
-    ActivityIndicator,
     Alert,
-    Modal,
 } from "react-native";
 import ControlText from "../../component/ControlText";
 import { CustomHeader } from "../../index";
@@ -17,8 +15,10 @@ import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 import AppStyle from "../../style";
 import { IMAGE } from "../../constant/Image";
+import { postApi } from "../../apis/Apis";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 
 export default class ProducDetail extends Component {
     constructor(props) {
@@ -31,7 +31,9 @@ export default class ProducDetail extends Component {
             apiUrl: "",
             GroupId: 0,
             config: {},
-            token: ''
+            token: '',
+            gioHangId: 0,
+            userId: 0
         };
     }
 
@@ -45,6 +47,7 @@ export default class ProducDetail extends Component {
                     config: JSON.parse(value)
                 });
             });
+            this.state.userId = 1;
             const { GroupId } = this.props.route.params;
             this.setState({ GroupId: GroupId })
             await this.loadData();
@@ -70,23 +73,6 @@ export default class ProducDetail extends Component {
                     />
                 </ScrollView>
                 {this.viewCart()}
-                {/* <View style={AppStyle.viewDelivery}>
-                    <View style={{ width: "60%" }, AppStyle.viewButtonCart}>
-                        <View style={{ width: 50, height: 50 }}>
-                            <Image source={IMAGE.ICON_CARTDELIVERY}
-                                style={{ width: 40, height: 40 }} resizeMode="contain"></Image>
-                            <View style={{ position: "absolute", right: 0, top: 0, backgroundColor: "red", width: 20, height: 20, borderRadius: 15, alignItems: "center", justifyContent: "center" }}>
-                                <ControlText style={{ fontSize: 15 }}>{this.state.product ? this.state.product.COUNT : 0}</ControlText>
-                            </View>
-                        </View>
-                        <ControlText style={AppStyle.textViewButtonCart}>{this.state.cartCount.TOTAL}đ</ControlText>
-                    </View>
-                    <View style={{ width: windowWidth * 0.4 }, AppStyle.viewButtonDelivery}>
-                        <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]}>
-                            <ControlText style={AppStyle.textDelivery}>Giao hàng</ControlText>
-                        </TouchableOpacity>
-                    </View>
-                </View> */}
             </SafeAreaView>
         )
     }
@@ -184,7 +170,7 @@ export default class ProducDetail extends Component {
                 if (data[index].COUNT && data[index].COUNT > 0) {
                     data[index].COUNT++;
                     data[index].TOTAL += item.DON_GIA;
-
+                    data[index].ID = item.Id;
                     cart.data = data;
                     this.setState({ cart: cart });
                 }
@@ -229,13 +215,7 @@ export default class ProducDetail extends Component {
         try {
 
             const data = this.state.data || [];
-            // for (let i = 0; i < data.length; i++) {
-            //     if (item.Id === data[i].Id) {
-            //         data[i].count = (data[i].count || 0) + 1;
-            //         this.setState({ data: data });
-            //         return;
-            //     }
-            // }
+
         }
         catch (error) {
             console.log('!!!addItem error!!!', error);
@@ -256,6 +236,80 @@ export default class ProducDetail extends Component {
         )
     }
 
+    datHang = () => {
+        try {
+            console.log("onDatHang", "Press")
+            let data = this.state.cart.data;
+            let cart = this.state.cart;
+            let dataInput = {};
+
+            if (data && cart) {
+                var date = new Date().getDate(); //Current Date
+                var month = new Date().getMonth() + 1; //Current Month
+                var year = new Date().getFullYear(); //Current Year
+                dataInput.NGAY_TAO = `${date}/${month}/${year}`;
+                dataInput.NGUOI_TAO_ID = 1;
+                dataInput.TONG_TIEN = cart.TOTAL;
+                let input = JSON.stringify(dataInput);
+                axios({
+                    method: 'POST',
+                    url: `${this.state.config.apiUrl}ThemGioHang`,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${this.state.token}`
+                    },
+                    data: input
+                }).then((response) => {
+                    this.setState({ gioHangId: response.data.Id });
+
+                    let inputProduct = [];
+                    for (let i = 0; i < data.length; i++) {
+                        let p = {};
+                        p.SAN_PHAM_ID = data[i].Id;
+                        p.GIO_HANG_ID = response.data.Id;
+                        p.SO_LUONG = data[i].COUNT;
+                        p.GIA = data[i].DON_GIA;
+                        inputProduct.push(p);
+                    }
+
+                    let jsProduct = JSON.stringify(inputProduct);
+
+                    axios({
+                        method: 'POST',
+                        url: `${this.state.config.apiUrl}ThemCtGioHang`,
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${this.state.token}`
+                        },
+                        data: jsProduct
+                    }).then((response) => {
+                        if (response.data.Success) {
+                            this.props.navigation.navigate("DsDonHang");
+                        }
+                    }).catch(function (error) {
+                        console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!\n")
+                        console.log(error);
+                    });
+                }).catch(function (error) {
+                    console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!\n")
+                    console.log(error);
+                });
+
+                // postApi(`${this.state.config.apiUrl}ThemGioHang`, input, header).then((response) => {
+                //     this.setState({ gioHangId: response.Id });
+
+                // }).catch(function (error) {
+                //     console.log("onDatHang ERROR\n")
+
+                // });
+
+
+            }
+        }
+        catch (error) {
+            console.log("onDatHang ERROR\n", JSON.stringify(error));
+        }
+    }
     viewCart = () => {
         var cart = this.state.cart;
         if (cart && cart.COUNT) {
@@ -272,8 +326,10 @@ export default class ProducDetail extends Component {
                         <ControlText style={AppStyle.textViewButtonCart}>{cart.TOTAL} đ</ControlText>
                     </View>
                     <View style={{ width: windowWidth * 0.4 }, AppStyle.viewButtonDelivery}>
-                        <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]}>
-                            <ControlText style={AppStyle.textDelivery}>Giao hàng</ControlText>
+                        <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]} onPress={() => {
+                            this.datHang()
+                        }}>
+                            <ControlText style={AppStyle.textDelivery}>Đặt hàng</ControlText>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -292,8 +348,11 @@ export default class ProducDetail extends Component {
                     <ControlText style={AppStyle.textViewButtonCart}>0 đ</ControlText>
                 </View>
                 <View style={{ width: windowWidth * 0.4 }, AppStyle.viewButtonDelivery}>
-                    <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]}>
-                        <ControlText style={AppStyle.textDelivery}>Giao hàng</ControlText>
+                    <TouchableOpacity style={[{ width: windowWidth * 0.3, height: windowHeight * 0.05 }, AppStyle.buttonDelivery]} onPress={() => {
+                        console.log("DAT HANG")
+                        // this.datHang()
+                    }}>
+                        <ControlText style={AppStyle.textDelivery}>Đặt hàng</ControlText>
                     </TouchableOpacity>
                 </View>
             </View>

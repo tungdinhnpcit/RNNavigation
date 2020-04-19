@@ -25,6 +25,7 @@ import { IMAGE } from "./src/constant/Image";
 import Search from './src/screens/main/Search'
 import ProductDetail from './src/screens/main/ProductDetail'
 import Strings from "./src/common/Strings";
+import DsDonHang from "./src/screens/DsDonHang";
 
 //diable warning
 //console.disableYellowBox=true;
@@ -116,6 +117,7 @@ function DrawerNavigator({ navigation }) {
       <Drawer.Screen name="Map" component={Map} />
       <Drawer.Screen name="ProductDetail" component={ProductDetail} />
       <Drawer.Screen name="CallAndroid" component={CallAndroid} />
+      <Drawer.Screen name="DsDonHang" component={DsDonHang} />
     </Drawer.Navigator>
   );
 }

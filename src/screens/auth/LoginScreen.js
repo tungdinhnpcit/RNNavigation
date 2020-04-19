@@ -14,6 +14,7 @@ import AppStyle from "../../style";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Strings from "../../common/Strings";
 import { getApi } from "../../apis/Apis";
+
 export class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +46,6 @@ export class LoginScreen extends Component {
     try {
       getApi(`${this.state.url}GetToken`).then((response) => {
         AsyncStorage.setItem('token', JSON.stringify(response.data));
-        console.log("!!!!!!!!!!!!!LoginScreen GET TOKEN OKE!!!!!!!!!!!\n")
       }).catch(function (error) {
         console.log("!!!!!!!!!!!!!LoginScreen GET TOKEN ERROR!!!!!!!!!!!\n")
         console.log(error);
